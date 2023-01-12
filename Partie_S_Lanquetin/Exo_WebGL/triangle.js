@@ -4,30 +4,31 @@ main();
 //         main         //
 //////////////////////////
 function main() {
- 	const canvas = document.querySelector("#glcanvas");
-    // Initialisation du contexte GL
-    const gl = canvas.getContext("webgl");
-    // Continue seulement si WebGL est disponible et fonctionne
-    if (!gl) {
-        alert("Impossible d'initialiser WebGL.");
-        return;
-  	}
+  const canvas = document.querySelector("#glcanvas");
+  // Initialisation du contexte GL
+  const gl = canvas.getContext("webgl");
+  // Continue seulement si WebGL est disponible et fonctionne
+  if (!gl) {
+    alert("Impossible d'initialiser WebGL.");
+    return;
+  }
 
   // Récupérer le code du vertex shader dans l'html
   const vertexShaderSource = document.getElementById('shader-vs').textContent;//HTML pas analysé innerText ou innerHTML ou text   
-  
+
   // Récupérer le du fragment shader dans l'html
   const fragmentShaderSource = document.getElementById('shader-fs').textContent;
-  
+
   //Initialiser un programme shader, de façon à ce que WebGL sache comment dessiner nos données
   const shaderProgram = initShaderProgram(gl, vertexShaderSource, fragmentShaderSource);
 
   // Objet JS contenant toutes les informations nécessaires pour le shader program
   // Recherche quel emplacement est assigné à nos entrées (1 attribut et deux uniformes)
-    const programInfo = {
+  const programInfo = {
     program: shaderProgram,
     attribLocations: {
       vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),//création d'un pointeur pour les données de vertex
+      vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor"),
     },
     uniformLocations: {
       projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -57,20 +58,41 @@ function initBuffers(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Créer maintenant un tableau JS des coordonnées pour le triangle.
-  const positions = [
-     0.0,  1.0,  1.0,
-        -Math.sqrt(3)/2.0, -1.0/2.0,  1.0,
-         Math.sqrt(3)/2.0, -1.0/2.0, 1.0
-  ];
+  const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
 
   // Passer mainenant la liste des positions à WebGL pour construire la forme.
   // Nous faisons cela en créant un Float32Array à partir du tableau JavaScript, puis en l'utilisant pour remplir le tampon en cours.
   gl.bufferData(gl.ARRAY_BUFFER,
-                new Float32Array(positions),
-                gl.STATIC_DRAW);
+    new Float32Array(positions),
+    gl.STATIC_DRAW);
+
+    const colors = [
+      1.0,
+      1.0,
+      1.0,
+      1.0, // white
+      1.0,
+      0.0,
+      0.0,
+      1.0, // red
+      0.0,
+      1.0,
+      0.0,
+      1.0, // green
+      0.0,
+      0.0,
+      1.0,
+      1.0, // blue
+    ];
+  
+    const colorBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+    
   //retourner l'ensemble des buffers crées
   return {
     position: positionBuffer,
+    color: colorBuffer,
   };
 }
 
@@ -96,37 +118,55 @@ function drawScene(gl, programInfo, buffers) {
 
   // note: glmatrix.js a toujours comme premier argument la destination où stocker le résultat.  
   mat4.perspective(projectionMatrix,
-                   fieldOfView,
-                   aspect,
-                   zNear,
-                   zFar);
+    fieldOfView,
+    aspect,
+    zNear,
+    zFar);
 
   // Définir la position de dessin comme étant le point "origine", qui est le centre de la scène.
   const modelViewMatrix = mat4.create();
 
   // translation
   mat4.translate(modelViewMatrix,     // destination matrix
-                 modelViewMatrix,     // matrix to translate
-                 [-0.0, 0.0, -6.0]);  // amount to translate
+    modelViewMatrix,     // matrix to translate
+    [-0.0, 0.0, -6.0]);  // amount to translate
 
   // Indiquer à WebGL comment extraire les positions à partir du tampon des coordonnées (buffers.position) pour les mettre dans l'attribut vertexPosition.
   {
-  	const numComponents = 3;  // 3 valeurs par itération
-    const type = gl.FLOAT;    // les données dans le tampon sont des flottants 32bit
-    const normalize = false;  // ne pas normaliser
-    const stride = 0;         // combien d'octets à extraire entre un jeu de valeurs et le suivant
-                              // 0 = utiliser le type et numComponents ci-dessus
-    const offset = 0;         // démarrer à partir de combien d'octets dans le tampon
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+    const numComponents = 2; // pull out 2 values per iteration
+  const type = gl.FLOAT; // the data in the buffer is 32bit floats
+  const normalize = false; // don't normalize
+  const stride = 0; // how many bytes to get from one set of values to the next
+  // 0 = use type and numComponents above
+  const offset = 0; // how many bytes inside the buffer to start from
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+  gl.vertexAttribPointer(
+    programInfo.attribLocations.vertexPosition,
+    numComponents,
+    type,
+    normalize,
+    stride,
+    offset
+  );
+  gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+  }
+
+  {
+    const numComponents = 4;
+    const type = gl.FLOAT;
+    const normalize = false;
+    const stride = 0;
+    const offset = 0;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
     gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset);
-    gl.enableVertexAttribArray(
-        programInfo.attribLocations.vertexPosition);
+      programInfo.attribLocations.vertexColor,
+      numComponents,
+      type,
+      normalize,
+      stride,
+      offset
+    );
+    gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
   }
 
   // Indiquer à WebGL d'utiliser notre programme pour dessiner
@@ -134,18 +174,18 @@ function drawScene(gl, programInfo, buffers) {
 
   // Définir les uniformes du shader
   gl.uniformMatrix4fv(
-      programInfo.uniformLocations.projectionMatrix,
-      false,
-      projectionMatrix);
+    programInfo.uniformLocations.projectionMatrix,
+    false,
+    projectionMatrix);
   gl.uniformMatrix4fv(
-      programInfo.uniformLocations.modelViewMatrix,
-      false,
-      modelViewMatrix);
-      
+    programInfo.uniformLocations.modelViewMatrix,
+    false,
+    modelViewMatrix);
+
   //Dessin de l'objet
   {
     const offset = 0;
-    const vertexCount = 3;
+    const vertexCount = 4;
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
 }
