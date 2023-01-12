@@ -58,7 +58,12 @@ function initBuffers(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Créer maintenant un tableau JS des coordonnées pour le triangle.
-  const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
+  const positions = [
+    1.0, 1.0, 
+    -1.0, 1.0, 
+    -1.0, -1.0, 
+    1.0, -1.0, 
+  ];
 
   // Passer mainenant la liste des positions à WebGL pour construire la forme.
   // Nous faisons cela en créant un Float32Array à partir du tableau JavaScript, puis en l'utilisant pour remplir le tampon en cours.
@@ -67,22 +72,10 @@ function initBuffers(gl) {
     gl.STATIC_DRAW);
 
     const colors = [
-      1.0,
-      1.0,
-      1.0,
-      1.0, // white
-      1.0,
-      0.0,
-      0.0,
-      1.0, // red
-      0.0,
-      1.0,
-      0.0,
-      1.0, // green
-      0.0,
-      0.0,
-      1.0,
-      1.0, // blue
+      1.0, 1.0, 1.0, 1.0, // white
+      1.0, 0.0, 0.0, 1.0, // red
+      0.0, 1.0, 0.0, 1.0, // green
+      0.0, 0.0, 1.0, 1.0, // blue
     ];
   
     const colorBuffer = gl.createBuffer();
@@ -186,7 +179,7 @@ function drawScene(gl, programInfo, buffers) {
   {
     const offset = 0;
     const vertexCount = 4;
-    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    gl.drawArrays(gl.TRIANGLES, offset, vertexCount);
   }
 }
 
