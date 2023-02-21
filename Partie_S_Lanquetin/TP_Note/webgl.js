@@ -4,6 +4,7 @@ let chosenColor = {
   "g": 255,
   "b": 255,
 };
+let then = 0;
 
 function hexToRgb(hex) {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
@@ -85,6 +86,39 @@ function initPositionBuffer(gl) {
     -1.0, -1.0,
   ];
 
+  const positionsTriangle = [
+    0.0, 1.0,
+    1.0, -.8,
+    -1.0, -.8,
+  ];
+
+  const positionsHexagon = [
+    0, 0,
+    1, 0,
+    .5, .866,
+    -.5, .866,
+    -1, 0,
+    -.5, -.866,
+    .5, -.866,
+    1, 0];
+
+  const positionsRectangle = [
+    2., 1.,
+    -2.0, 1.0,
+    2.0, -1.0,
+    -2.0, -1.0,
+  ];
+
+  let angle = 2 * Math.PI / 8
+  let radius = 2.0;
+  let positionsOctogone = [0, 0]
+  let x, z;
+  for (let i = 0; i < 7; i++) {
+    x = radius * Math.cos(angle * i);
+    z = radius * Math.sin(angle * i);
+    positionsOctogone.push(x, z); //3 floats making one vertex
+  }
+
   let postitions;
   switch (chosenModel) {
     case "Cube":
@@ -92,6 +126,18 @@ function initPositionBuffer(gl) {
       break;
     case "Carre":
       postitions = positionsCarre
+      break;
+    case "Triangle":
+      postitions = positionsTriangle
+      break;
+    case "Hexagone":
+      postitions = positionsHexagon
+      break;
+    case "Rectangle":
+      postitions = positionsRectangle
+      break;
+    case "Octogone":
+      postitions = positionsOctogone
       break;
     default:
       break;
@@ -124,15 +170,61 @@ function initColorBuffer(gl) {
         colors = colors.concat(c, c, c, c);
       }
       break;
-      case "Carre":
-        colors = [
-          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
-          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
-          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
-          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
-        ];
+    case "Carre":
+      colors = [
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+      ];
       break;
-      
+    case "Triangle":
+      colors = [
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+      ];
+      break;
+    case "Hexagone":
+      colors = [
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+      ];
+      break;
+    case "Rectangle":
+      colors = [
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+      ];
+      break;
+    case "Octogone":
+      colors = [
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+        chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0,    // blanc
+      ];
+      break;
     default:
       break;
   }
@@ -302,6 +394,26 @@ function drawScene(gl, programInfo, buffers, cubeRotation) {
         vertexCount = 4;
         gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
         break;
+      case "Triangle":
+        offset = 0;
+        vertexCount = 3;
+        gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+        break;
+      case "Hexagone":
+        offset = 0;
+        vertexCount = 8;
+        gl.drawArrays(gl.TRIANGLE_FAN, offset, vertexCount);
+        break;
+      case "Rectangle":
+        offset = 0;
+        vertexCount = 4;
+        gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+        break;
+      case "Octogone":
+        offset = 0;
+        vertexCount = 8;
+        gl.drawArrays(gl.TRIANGLE_FAN, offset, vertexCount);
+        break;
       default:
         break;
     }
@@ -319,6 +431,18 @@ function setPositionAttribute(gl, buffers, programInfo) {
       numComponents = 3;
       break;
     case "Carre":
+      numComponents = 2;
+      break;
+    case "Triangle":
+      numComponents = 2;
+      break;
+    case "Hexagone":
+      numComponents = 2;
+      break;
+    case "Rectangle":
+      numComponents = 2;
+      break;
+    case "Octogone":
       numComponents = 2;
       break;
     default:
@@ -441,8 +565,6 @@ function main() {
   // objects we'll be drawing.
   const buffers = initBuffers(gl);
 
-  let then = 0;
-
   // Draw the scene repeatedly
   function render(now) {
     now *= 0.001; // convert to seconds
@@ -450,7 +572,7 @@ function main() {
     then = now;
 
     drawScene(gl, programInfo, buffers, cubeRotation);
-    cubeRotation += deltaTime;
+    cubeRotation = deltaTime;
 
     requestAnimationFrame(render);
   }
