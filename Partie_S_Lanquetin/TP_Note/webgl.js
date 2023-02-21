@@ -24,6 +24,7 @@ document.getElementById("models").addEventListener('click', function (event) {
   if (event.target && event.target.matches("input[type='radio']")) {
     console.log("Chose:", event.target.value)
     chosenModel = event.target.value;
+    main()
   }
 });
 
@@ -123,7 +124,15 @@ function initColorBuffer(gl) {
         colors = colors.concat(c, c, c, c);
       }
       break;
-
+      case "Carre":
+        colors = [
+          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
+          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
+          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
+          chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255,  1.0,    // blanc
+        ];
+      break;
+      
     default:
       break;
   }
