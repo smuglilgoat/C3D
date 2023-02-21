@@ -1,3 +1,4 @@
+// Var Globales 
 let chosenModel = "Cube";
 let chosenColor = {
   "r": 255,
@@ -6,8 +7,8 @@ let chosenColor = {
 };
 let then = 0;
 
+// Fonction de convertion HEX -> RGB
 function hexToRgb(hex) {
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function (m, r, g, b) {
     return r + r + g + g + b + b;
@@ -21,6 +22,7 @@ function hexToRgb(hex) {
   } : null;
 }
 
+// Event Listeners pour le mesh + couleur
 document.getElementById("models").addEventListener('click', function (event) {
   const isButton = event.target.nodeName === 'BUTTON';
   if (isButton) {
@@ -38,7 +40,7 @@ document.getElementById("color").addEventListener("change", function (event) {
 });
 
 
-
+// Init Buffers
 function initBuffers(gl) {
   const positionBuffer = initPositionBuffer(gl);
 
@@ -54,11 +56,7 @@ function initBuffers(gl) {
 }
 
 function initPositionBuffer(gl) {
-  // Create a buffer for the square's positions.
   const positionBuffer = gl.createBuffer();
-
-  // Select the positionBuffer as the one to apply buffer
-  // operations to from here out.
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   const positionsPyramid = [
@@ -107,7 +105,7 @@ function initPositionBuffer(gl) {
   for (let i = 0; i < 8; i++) {
     x = radius * Math.cos(angle * i);
     z = radius * Math.sin(angle * i);
-    positionsHexagon.push(x, z); //3 floats making one vertex
+    positionsHexagon.push(x, z); 
   }
 
   angle = 2 * Math.PI / 4
@@ -116,7 +114,7 @@ function initPositionBuffer(gl) {
   for (let i = 0; i < 6; i++) {
     x = radius * Math.cos(angle * i);
     z = radius * Math.sin(angle * i);
-    positionsCarre.push(x, z); //3 floats making one vertex
+    positionsCarre.push(x, z); 
   }
 
   angle = 2 * Math.PI / 3
@@ -125,7 +123,7 @@ function initPositionBuffer(gl) {
   for (let i = 0; i < 5; i++) {
     x = radius * Math.cos(angle * i);
     z = radius * Math.sin(angle * i);
-    positionsTriangle.push(x, z); //3 floats making one vertex
+    positionsTriangle.push(x, z); 
   }
 
   const positionsRectangle = [
@@ -141,7 +139,7 @@ function initPositionBuffer(gl) {
   for (let i = 0; i < 10; i++) {
     x = radius * Math.cos(angle * i);
     z = radius * Math.sin(angle * i);
-    positionsOctogone.push(x, z); //3 floats making one vertex
+    positionsOctogone.push(x, z);
   }
 
   angle = 2 * Math.PI / 5
@@ -150,7 +148,7 @@ function initPositionBuffer(gl) {
   for (let i = 0; i < 7; i++) {
     x = radius * Math.cos(angle * i);
     z = radius * Math.sin(angle * i);
-    positionsPentagone.push(x, z); //3 floats making one vertex
+    positionsPentagone.push(x, z);
   }
 
   angle = 2 * Math.PI / 100
@@ -159,7 +157,7 @@ function initPositionBuffer(gl) {
   for (let i = 0; i < 102; i++) {
     x = radius * Math.cos(angle * i);
     z = radius * Math.sin(angle * i);
-    positionsDisque.push(x, z); //3 floats making one vertex
+    positionsDisque.push(x, z);
   }
 
   let postitions;
@@ -195,11 +193,7 @@ function initPositionBuffer(gl) {
       break;
   }
 
-  // Now pass the list of positions into WebGL to build the
-  // shape. We do this by creating a Float32Array from the
-  // JavaScript array, then use it to fill the current buffer.
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(postitions), gl.STATIC_DRAW);
-
   return positionBuffer;
 }
 
@@ -209,16 +203,15 @@ function initColorBuffer(gl) {
   switch (chosenModel) {
     case "Cube":
       const faceColors = [
-        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0], // Left face: purple
-        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0], // Left face: purple
-        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0], // Left face: purple
-        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0], // Left face: purple
-        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0], // Left face: purple
-        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0], // Left face: purple
+        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0],
+        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0],
+        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0],
+        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0],
+        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0],
+        [chosenColor.r / 255, chosenColor.g / 255, chosenColor.b / 255, 1.0],
       ];
       for (var j = 0; j < faceColors.length; ++j) {
         const c = faceColors[j];
-        // Repeat each color four times for the four vertices of the face
         colors = colors.concat(c, c, c, c);
       }
       break;
@@ -265,23 +258,15 @@ function initColorBuffer(gl) {
     default:
       break;
   }
-
-  // Convert the array of colors into a table for all the vertices.
-
   const colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
   return colorBuffer;
 }
 
 function initIndexBuffer(gl) {
   const indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-  // This array defines each face as two triangles, using the
-  // indices into the vertex array to specify each triangle's
-  // position.
 
   const indices = [
     0,
@@ -322,18 +307,15 @@ function initIndexBuffer(gl) {
     23, // left
   ];
 
-  // Now send the element array to GL
-
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     new Uint16Array(indices),
     gl.STATIC_DRAW
   );
-
   return indexBuffer;
 }
 
-function drawScene(gl, programInfo, buffers, cubeRotation) {
+function drawScene(gl, programInfo, buffers, meshRotation) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -375,19 +357,19 @@ function drawScene(gl, programInfo, buffers, cubeRotation) {
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation, // amount to rotate in radians
+    meshRotation, // amount to rotate in radians
     [0, 0, 1]
   ); // axis to rotate around (Z)
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation * 0.7, // amount to rotate in radians
+    meshRotation * 0.7, // amount to rotate in radians
     [0, 1, 0]
   ); // axis to rotate around (Y)
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation * 0.3, // amount to rotate in radians
+    meshRotation * 0.3, // amount to rotate in radians
     [1, 0, 0]
   ); // axis to rotate around (X)
 
@@ -421,9 +403,9 @@ function drawScene(gl, programInfo, buffers, cubeRotation) {
 
     switch (chosenModel) {
       case "Cube":
-        vertexCount = 36;
         const type = gl.UNSIGNED_SHORT;
         offset = 0;
+        vertexCount = 36;
         gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
         break;
       case "Carre":
@@ -473,8 +455,6 @@ function drawScene(gl, programInfo, buffers, cubeRotation) {
   }
 }
 
-// Tell WebGL how to pull out the positions from the position
-// buffer into the vertexPosition attribute.
 function setPositionAttribute(gl, buffers, programInfo) {
   let numComponents;
 

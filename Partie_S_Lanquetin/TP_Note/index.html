@@ -4,16 +4,15 @@
 <head>
   <meta charset="utf-8" />
   <title>TP Note - MOUSSAOUI Ahmed</title>
-  <link rel="stylesheet" href="style.css" type="text/css">
   <script src="gl-matrix.js"></script>
   <script src="webgl.js" type="module" defer></script>
 </head>
 
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh">
-  <canvas id="glcanvas" width="640" height="480" style="	width: 940px;
+  <canvas id="glcanvas" width="640" height="480" style="	width: 1050px;
 	height: auto;"></canvas>
   <form onsubmit="event.preventDefault();"">
-    <p>Select a Form to render:</p>
+    <p>Select a mesh to render:</p>
     <div style="display: flex; flex-direction: row;" id="models">
       <button value="Triangle">
         <img src="formes/triangle.png" data-value="Triangle">
