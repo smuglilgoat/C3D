@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>TP Note - MOUSSAOUI Ahmed</title>
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <script src="gl-matrix.js"></script>
+  <script src="webgl.js" type="module" defer></script>
+</head>
+
+<body>
+  <canvas id="glcanvas" width="640" height="480"></canvas>
+  <form id="models">
+    <p>Select a Form to render:</p>
+    <div>
+      <input type="radio" id="Triangle" name="model" value="Triangle">
+      <label for="Triangle">Triangle</label>
+
+      <input type="radio" id="Carre" name="model" value="Carre">
+      <label for="Carre">Carre</label>
+
+      <input type="radio" id="Disque" name="model" value="Disque">
+      <label for="Disque">Disque</label>
+
+      <input type="radio" id="Hexagone" name="model" value="Hexagone">
+      <label for="Hexagone">Hexagone</label>
+
+      <input type="radio" id="Octogone" name="model" value="Octogone">
+      <label for="Octogone">Octogone</label>
+
+      <input type="radio" id="Pentagone" name="model" value="Pentagone">
+      <label for="Pentagone">Pentagone</label>
+
+      <input type="radio" id="Rectangle" name="model" value="Rectangle">
+      <label for="Rectangle">Rectangle</label>
+
+      <input type="radio" id="Cube" name="model" value="Cube" checked>
+      <label for="Cube">Cube</label>
+    </div>
+    <p>Choose the color:</p>
+    <div>
+      <input type="color" id="color" name="color" value="#e66465">
+    </div>
+
+
+  </form>
+
+</body>
+
+</html>
