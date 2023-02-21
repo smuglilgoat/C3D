@@ -9,34 +9,40 @@
   <script src="webgl.js" type="module" defer></script>
 </head>
 
-<body>
-  <canvas id="glcanvas" width="640" height="480"></canvas>
-  <form id="models">
+<body style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh">
+  <canvas id="glcanvas" width="640" height="480" style="	width: 940px;
+	height: auto;"></canvas>
+  <form onsubmit="event.preventDefault();"">
     <p>Select a Form to render:</p>
-    <div>
-      <input type="radio" id="Triangle" name="model" value="Triangle">
-      <label for="Triangle">Triangle</label>
+    <div style="display: flex; flex-direction: row;" id="models">
+      <button value="Triangle">
+        <img src="formes/triangle.png" data-value="Triangle">
+      </button>
+      <button value="Carre">
+        <img src="formes/carre.png" data-value="Carre">
+      </button>
+      <button value="Disque">
+        <img src="formes/disque.png" data-value="Disque">
+      </button>
+      <button value="Hexagone">
+        <img src="formes/hexagone.png" data-value="Hexagone">
+      </button>
+      <button value="Octogone">
+        <img src="formes/octogone.png" data-value="Octogone">
+      </button>
+      <button value="Pentagone">
+        <img src="formes/pentagone.png" data-value="Pentagone">
+      </button>
+      <button value="Rectangle">
+        <img src="formes/rectangle.png" data-value="Rectangle">
+      </button>
+      <button value="Cube">
+        <img src="formes/cube.png" data-value="Cube">
+      </button>
+      <button value="Pyramid">
+        Pyramid
+      </button>
 
-      <input type="radio" id="Carre" name="model" value="Carre">
-      <label for="Carre">Carre</label>
-
-      <input type="radio" id="Disque" name="model" value="Disque">
-      <label for="Disque">Disque</label>
-
-      <input type="radio" id="Hexagone" name="model" value="Hexagone">
-      <label for="Hexagone">Hexagone</label>
-
-      <input type="radio" id="Octogone" name="model" value="Octogone">
-      <label for="Octogone">Octogone</label>
-
-      <input type="radio" id="Pentagone" name="model" value="Pentagone">
-      <label for="Pentagone">Pentagone</label>
-
-      <input type="radio" id="Rectangle" name="model" value="Rectangle">
-      <label for="Rectangle">Rectangle</label>
-
-      <input type="radio" id="Cube" name="model" value="Cube" checked>
-      <label for="Cube">Cube</label>
     </div>
     <p>Choose the color:</p>
     <div>
